@@ -21,15 +21,16 @@ public class BattleShip extends JFrame
   private JLabel statusLabel;
   private int[][] model = new int[20][20];
   private String host = "localhost";
-  //private TimerThread timer=null;
+  private JLabel timerLabel;
+  private TimerThread timerThread=null;
   private Toolkit toolkit;
+  private volatile boolean running=false;
   private int port = 5000;
   private PrintWriter out = null;
   private boolean connected = false;
   private boolean yourTurn = false;
   private ServerSocket serverSocket;
   private boolean debug = false;
-  private JLabel timerLabel;
   private volatile boolean lost=false;
   private volatile boolean won=false;
   private boolean started=false;
@@ -42,7 +43,8 @@ public class BattleShip extends JFrame
   public static String[][] grid = new String[numRows][numCols];
   public static int[][] missedGuesses = new int[numRows][numCols];
 
-  public BattleShip() {
+  public BattleShip() 
+  {
     super("BattleShip");
 
     ActionHandler ah = new ActionHandler();
@@ -69,8 +71,11 @@ public class BattleShip extends JFrame
     networkMenu.add(quitItem);
 
     JPanel buttonPanel = new JPanel();
-    buttonPanel.setLayout(new GridLayout(2,1));
+    buttonPanel.setLayout(new GridLayout(2,2));
     add(buttonPanel, BorderLayout.NORTH);
+
+    timerLabel=new JLabel("Time:      0.00.0");
+    buttonPanel.add(timerLabel);
 
     JPanel timerPanel=new JPanel();
     buttonPanel.add(timerPanel);
@@ -121,6 +126,40 @@ public class BattleShip extends JFrame
     pack();
     setVisible(true);
   }
+
+  public void createBoard() 
+  {
+    // if(timer!=null) timer.interrupt();
+    // gameGrid=new int[gridSize][gridSize];
+    lost=false;
+    won=false;
+    started=false;
+    statusLabel.setText("Right now, sea is empty");
+    timerLabel.setText("Time:      0:00.0");
+  }
+    public void deployPlayerShips() 
+    {
+      Scanner input = new Scanner(System.in);
+      statusLabel.setText("Deploy your ships:");
+      // Deploying five ships for player
+      BattleShip.playerShips = 5;
+      for (int i = 1; i <= BattleShip.playerShips;) 
+      {
+        statusLabel.setText("Enter X coordinate for your ship: ");
+        int x = input.nextInt();
+        statusLabel.setText("Enter Y  coordinate for your ship: ");
+        int y = input.nextInt();
+
+        if ((x >= 0 && x < numRows) && (y >= 0 && y < numCols) && (grid[x][y] == " ")) {
+          grid[x][y] = "@";
+          i++;
+        } else if ((x >= 0 && x < numRows) && (y >= 0 && y < numCols) && grid[x][y] == "@")
+          System.out.println("You can't place two or more ships on the same location");
+        else if ((x < 0 || x >= numRows) || (y < 0 || y >= numCols))
+          System.out.println("You can't place ships outside the " + numRows + " by " + numCols + " grid");
+      }
+      //printOceanMap();
+    }
 
   private class ActionHandler implements ActionListener {
     public void actionPerformed(ActionEvent e) {
@@ -192,6 +231,30 @@ public class BattleShip extends JFrame
       drawingPanel.repaint();
       yourTurn = false;
       statusLabel.setText("Opponent's turn.");
+    }
+  }
+
+  private class TimerThread extends Thread
+  {
+    public void run()
+    {
+      float msecs=0;
+      long base=System.currentTimeMillis();
+      try
+      {
+        while(running)
+        {
+          sleep(20);
+          long curr=System.currentTimeMillis();
+          int delt=(int)(curr-base)/100;
+          int tenths=(int)(delt%10);
+          int mins=(int)(delt/600);
+          int secs=(int)((delt/10)%60);
+          timerLabel.setText("Time: "+String.format("%6d:%02d.%01d",mins,secs,tenths));
+        }
+      }
+      catch(InterruptedException ie)
+      {}
     }
   }
 
@@ -288,50 +351,6 @@ public class BattleShip extends JFrame
     new BattleShip();
   }
 }
-
-// public class BattleShip extends JFrame 
-// {
-//   private JPanel gamePanel;
-//   private int gridSize=16;
-//   private int cellSize=21;
-//   private int[][] gameGrid;
-//   private JMenuItem hostItem;
-//   private JMenuItem joinItem;
-//   private JMenuItem quitItem;
-//   private JButton newButton;
-//   private JButton resetButton;
-//   private JPanel drawingPanel;
-//   private JLabel statusLabel;
-//   private int[][] model = new int[20][20];
-//   private String host = "localhost";
-//   private TimerThread timer=null;
-//   private Toolkit toolkit;
-//   private int port = 5000;
-//   private PrintWriter out = null;
-//   private boolean connected = false;
-//   private boolean yourTurn = false;
-//   private ServerSocket serverSocket;
-//   private boolean debug = false;
-//   private JLabel timerLabel;
-//   private volatile boolean lost=false;
-//   private volatile boolean won=false;
-//   private boolean started=false;
-//   //private AudioInputStream ais;
-//   //private AudioFormat[] fmt;
-//   public static int numRows = 10;
-//   public static int numCols = 10;
-//   public static int playerShips;
-//   public static int computerShips;
-//   public static String[][] grid = new String[numRows][numCols];
-//   public static int[][] missedGuesses = new int[numRows][numCols];
-
-//   public BattleShip()
-//   {
-//     super("BattleShip");
-
-//     ActionHandler ah= new ActionHandler();
-//     MouseHandler mh = new MouseHandler();
-//     toolkit = getToolkit();
 
 //     JPanel buttonPanel=new JPanel();
 //     buttonPanel.setLayout(new GridLayout(2,1));
