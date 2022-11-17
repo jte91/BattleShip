@@ -173,44 +173,44 @@ public class BattleShip extends JFrame
       {
         g.drawLine(i*cellSize+cellSize,0,i*cellSize+cellSize,getHeight());
       }
-      for(int i=0;i<gridSize;i++)
-      {
-        for(int j=0;j<gridSize;j++)
-        { 
-          if(uncoveredGrid[i][j])
-          {
-            g.setColor(Color.BLUE);
-            if(gameGrid[i][j]>0) 
-                 g.drawString(""+gameGrid[i][j],i*cellSize+7,j*cellSize+15);
-          }
-          else
-          {
-            g.setColor(Color.GRAY);
-            g.fillRect(i*cellSize,j*cellSize,20,20);
-          }
-          if(hit&&gameGrid[i][j]==SHIP)
-          {
-            if(uncoveredGrid[i][j]) g.setColor(Color.RED);
-            else g.setColor(Color.BLUE);
-            g.drawLine(i*cellSize+10,j*cellSize+8,i*cellSize+12,j*cellSize+4);
-            g.fillOval(i*cellSize+5,j*cellSize+6,11,11);
-            g.setColor(Color.WHITE);
-            g.drawLine(i*cellSize+8,j*cellSize+10,i*cellSize+10,j*cellSize+10);
-          }
-          if(flaggedGrid[i][j])
-          {
-            g.setColor(Color.BLACK);
-            g.drawLine(i*cellSize+5,j*cellSize+5,i*cellSize+5,j*cellSize+19);
-            g.setColor(Color.RED);
-            g.fillRect(i*cellSize+6,j*cellSize+6,10,6);
-          }
-          if(debug)
-          {
-            g.setColor(Color.LIGHT_GRAY);
-            if(!uncoveredGrid[i][j]) 
-                    g.drawString(""+gameGrid[i][j],i*cellSize+6,j*cellSize+15);
-          }
-        }
+      // for(int i=0;i<gridSize;i++)
+      // {
+      //   for(int j=0;j<gridSize;j++)
+      //   { 
+      //     if(uncoveredGrid[i][j])
+      //     {
+      //       g.setColor(Color.BLUE);
+      //       if(gameGrid[i][j]>0) 
+      //            g.drawString(""+gameGrid[i][j],i*cellSize+7,j*cellSize+15);
+      //     }
+      //     else
+      //     {
+      //       g.setColor(Color.GRAY);
+      //       g.fillRect(i*cellSize,j*cellSize,20,20);
+      //     }
+      //     if(hit&&gameGrid[i][j]==SHIP)
+      //     {
+      //       if(uncoveredGrid[i][j]) g.setColor(Color.RED);
+      //       else g.setColor(Color.BLUE);
+      //       g.drawLine(i*cellSize+10,j*cellSize+8,i*cellSize+12,j*cellSize+4);
+      //       g.fillOval(i*cellSize+5,j*cellSize+6,11,11);
+      //       g.setColor(Color.WHITE);
+      //       g.drawLine(i*cellSize+8,j*cellSize+10,i*cellSize+10,j*cellSize+10);
+      //     }
+      //     if(flaggedGrid[i][j])
+      //     {
+      //       g.setColor(Color.BLACK);
+      //       g.drawLine(i*cellSize+5,j*cellSize+5,i*cellSize+5,j*cellSize+19);
+      //       g.setColor(Color.RED);
+      //       g.fillRect(i*cellSize+6,j*cellSize+6,10,6);
+      //     }
+      //     if(debug)
+      //     {
+      //       g.setColor(Color.LIGHT_GRAY);
+      //       if(!uncoveredGrid[i][j]) 
+      //               g.drawString(""+gameGrid[i][j],i*cellSize+6,j*cellSize+15);
+      //     }
+      //   }
       }
     //   for (int j = 0; j < 20; j++) {
     //     for (int i = 0; i < 20; i++) {
@@ -230,7 +230,7 @@ public class BattleShip extends JFrame
     // add(drawingPanel);
 
     
-    }
+    //}
   }
     public void deployPlayerShips() 
     {
@@ -308,7 +308,8 @@ public class BattleShip extends JFrame
       //     if (out != null)
       //       out.println("quit");
 
-    private class MouseHandler extends MouseAdapter {
+    private class MouseHandler extends MouseAdapter 
+    {
       public void mousePressed(MouseEvent e) 
       {
         if (out == null)
@@ -337,6 +338,10 @@ public class BattleShip extends JFrame
             //timer.interrupt();
             statusLabel.setText("You Hit a Ship!");
             //new SoundThread(BOOM).start();
+          }
+          else
+          {
+            statusLabel.setText("You Missed!");
           }
         }
         model[i][j] = 1;
