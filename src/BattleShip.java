@@ -150,8 +150,7 @@ public class BattleShip extends JFrame
 
     // add(drawingPanel);
 
-    statusLabel = new JLabel("Right now, sea is empty");
-    add(statusLabel, BorderLayout.SOUTH);
+    
     }
   }
     public void deployPlayerShips() 
