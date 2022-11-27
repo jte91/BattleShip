@@ -173,7 +173,9 @@ public class BattleShip extends JFrame
       {
         g.drawLine(i*cellSize+cellSize,0,i*cellSize+cellSize,getHeight());
       }
-   
+    }
+    
+    
   }
     public void deployPlayerShips() 
     {
