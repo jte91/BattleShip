@@ -173,64 +173,7 @@ public class BattleShip extends JFrame
       {
         g.drawLine(i*cellSize+cellSize,0,i*cellSize+cellSize,getHeight());
       }
-      // for(int i=0;i<gridSize;i++)
-      // {
-      //   for(int j=0;j<gridSize;j++)
-      //   { 
-      //     if(uncoveredGrid[i][j])
-      //     {
-      //       g.setColor(Color.BLUE);
-      //       if(gameGrid[i][j]>0) 
-      //            g.drawString(""+gameGrid[i][j],i*cellSize+7,j*cellSize+15);
-      //     }
-      //     else
-      //     {
-      //       g.setColor(Color.GRAY);
-      //       g.fillRect(i*cellSize,j*cellSize,20,20);
-      //     }
-      //     if(hit&&gameGrid[i][j]==SHIP)
-      //     {
-      //       if(uncoveredGrid[i][j]) g.setColor(Color.RED);
-      //       else g.setColor(Color.BLUE);
-      //       g.drawLine(i*cellSize+10,j*cellSize+8,i*cellSize+12,j*cellSize+4);
-      //       g.fillOval(i*cellSize+5,j*cellSize+6,11,11);
-      //       g.setColor(Color.WHITE);
-      //       g.drawLine(i*cellSize+8,j*cellSize+10,i*cellSize+10,j*cellSize+10);
-      //     }
-      //     if(flaggedGrid[i][j])
-      //     {
-      //       g.setColor(Color.BLACK);
-      //       g.drawLine(i*cellSize+5,j*cellSize+5,i*cellSize+5,j*cellSize+19);
-      //       g.setColor(Color.RED);
-      //       g.fillRect(i*cellSize+6,j*cellSize+6,10,6);
-      //     }
-      //     if(debug)
-      //     {
-      //       g.setColor(Color.LIGHT_GRAY);
-      //       if(!uncoveredGrid[i][j]) 
-      //               g.drawString(""+gameGrid[i][j],i*cellSize+6,j*cellSize+15);
-      //     }
-      //   }
-      }
-    //   for (int j = 0; j < 20; j++) {
-    //     for (int i = 0; i < 20; i++) {
-    //       if (model[i][j] == 1) {
-            
-    //         g.fillRect(20 * i, 20 * j, 20, 20);
-    //       }
-    //     }
-    //   }
-    //   g.setColor(Color.GRAY);
-    //   for (int i = 0; i <= 20; i++) {
-    //     g.drawLine(0, 20 * i, 400, 20 * i);
-    //     g.drawLine(20 * i, 0, 20 * i, 400);
-    //   }
-    // };drawingPanel.setPreferredSize(new Dimension(601,601));drawingPanel.addMouseListener(mh);
-
-    // add(drawingPanel);
-
-    
-    //}
+   
   }
     public void deployPlayerShips() 
     {
@@ -264,49 +207,7 @@ public class BattleShip extends JFrame
         statusLabel.setText("Deploy your ships:");
       }
     }
-      //     if (out != null)
-      //       out.println("reset");
-      //     drawingPanel.repaint();
-      //   } else if (e.getSource() == hostItem) {
-      //     String s = JOptionPane.showInputDialog(BattleShip.this, "Enter the port to use", "" + port);
-      //     if (s == null)
-      //       return;
-      //     port = Integer.parseInt(s);
-      //     yourTurn = false;
-      //     hostItem.setEnabled(false);
-      //     joinItem.setEnabled(false);
-      //     quitItem.setEnabled(true);
-      //     new Server().start();
-      //   } else if (e.getSource() == joinItem) {
-      //     String s = JOptionPane.showInputDialog(BattleShip.this, "Enter the hostname", "" + host);
-      //     if (s == null)
-      //       return;
-      //     host = s;
-      //     s = JOptionPane.showInputDialog(BattleShip.this, "Enter the port to use", "" + port);
-      //     if (s == null)
-      //       return;
-      //     port = Integer.parseInt(s);
-      //     yourTurn = true;
-      //     hostItem.setEnabled(false);
-      //     joinItem.setEnabled(false);
-      //     quitItem.setEnabled(true);
-      //     new Client().start();
-      //   } else if (e.getSource() == quitItem) {
-      //     connected = false;
-      //     if (serverSocket != null) {
-      //       try {
-      //         serverSocket.close();
-      //         serverSocket = null;
-      //       } catch (IOException ioe) {
-      //         System.out.println(ioe);
-      //       }
-      //     }
-      //     hostItem.setEnabled(true);
-      //     joinItem.setEnabled(true);
-      //     quitItem.setEnabled(false);
-      //     statusLabel.setText("Game ended.");
-      //     if (out != null)
-      //       out.println("quit");
+
 
     private class MouseHandler extends MouseAdapter 
     {
@@ -372,94 +273,6 @@ public class BattleShip extends JFrame
       }
     }
 
-    // private class Server extends Thread {
-    //   public void run() {
-    //     try {
-    //       serverSocket = new ServerSocket(port);
-    //       statusLabel.setText("Waiting for opponent to connect...");
-    //       Socket s = serverSocket.accept();
-    //       statusLabel.setText("Opponent's turn.");
-    //       connected = true;
-    //       BufferedReader in = new BufferedReader(new InputStreamReader(
-    //           s.getInputStream()));
-    //       out = new PrintWriter(s.getOutputStream(), true);
-    //       String line;
-    //       while (connected && (line = in.readLine()) != null) {
-    //         if (line.equals("quit"))
-    //           break;
-    //         if (line.equals("reset")) {
-    //           for (int j = 0; j < 20; j++) {
-    //             for (int i = 0; i < 20; i++) {
-    //               model[i][j] = 0;
-    //             }
-    //           }
-    //           drawingPanel.repaint();
-    //           continue;
-    //         }
-    //         String[] sa = line.split(",");
-    //         int i = Integer.parseInt(sa[0]);
-    //         int j = Integer.parseInt(sa[1]);
-    //         model[i][j] = 2;
-    //         drawingPanel.repaint();
-    //         yourTurn = true;
-    //         statusLabel.setText("Your turn.");
-    //       }
-    //       connected = false;
-    //       statusLabel.setText("Game ended.");
-    //       if (serverSocket != null)
-    //         serverSocket.close();
-    //       serverSocket = null;
-    //       s.close();
-    //     } catch (IOException ioe) {
-    //       System.out.println(ioe);
-    //     }
-    //     hostItem.setEnabled(true);
-    //     joinItem.setEnabled(true);
-    //     quitItem.setEnabled(false);
-    //   }
-    // }
-
-    // private class Client extends Thread {
-    //   public void run() {
-    //     try {
-    //       Socket s = new Socket(host, port);
-    //       statusLabel.setText("Your turn.");
-    //       connected = true;
-    //       BufferedReader in = new BufferedReader(new InputStreamReader(
-    //           s.getInputStream()));
-    //       out = new PrintWriter(s.getOutputStream(), true);
-    //       String line;
-    //       while (connected && (line = in.readLine()) != null) {
-    //         if (line.equals("quit"))
-    //           break;
-    //         if (line.equals("reset")) {
-    //           for (int j = 0; j < 20; j++) {
-    //             for (int i = 0; i < 20; i++) {
-    //               model[i][j] = 0;
-    //             }
-    //           }
-    //           drawingPanel.repaint();
-    //           continue;
-    //         }
-    //         String[] sa = line.split(",");
-    //         int i = Integer.parseInt(sa[0]);
-    //         int j = Integer.parseInt(sa[1]);
-    //         model[i][j] = 2;
-    //         drawingPanel.repaint();
-    //         yourTurn = true;
-    //         statusLabel.setText("Your turn.");
-    //       }
-    //       connected = false;
-    //       statusLabel.setText("Game ended.");
-    //       s.close();
-    //     } catch (IOException ioe) {
-    //       System.out.println(ioe);
-    //     }
-    //     hostItem.setEnabled(true);
-    //     joinItem.setEnabled(true);
-    //     quitItem.setEnabled(false);
-    //   }
-    // }
 
     public static void main(String[] args) 
     {
