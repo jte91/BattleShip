@@ -6,57 +6,48 @@ import javax.swing.*;
 //import java.io.*;
 //import java.net.*;
 
-public class BattleShip extends JFrame {
+public class BattleShip extends JFrame 
+{
   private PlayerPanel playerPanel;
   private ComputerPanel computerPanel;
   private int gridSize = 10;
   private int cellSize = 30;
   private int numShips = 10;
+  private int guessCount = 1;
   private int[][] gameGrid;
   private boolean[][] hitGrid;
   private boolean[][] missedGrid;
   private static final int NONE = 0;
   private static final int SHIP = -1;
   private JButton newButton;
-//  private JButton resetButton;
-//  private JPanel drawingPanel;
   private JLabel statusLabel;
   private int[][] playerModel = new int[10][10];
   private int[][] computerModel = new int[10][10];
-//  private String host = "localhost";
   private JLabel timerLabel;
   private TimerThread timer = null;
   private Toolkit toolkit;
   private volatile boolean running = false;
-//  private PrintWriter out = null;
 //  private boolean yourTurn = false;
   private boolean addingShips = false;
+  private boolean detectingShips = false;
   private int shipCount = 0;
-  private boolean debug = false;
+  private int guess = 0;
+  private boolean debug = true;
   private volatile boolean lost = false;
   private volatile boolean won = false;
   private volatile boolean hit = false;
   private volatile boolean miss = false;
-  private Color defaultBackground;
   private boolean started = false;
-  private Point firstPoint = new Point(0,0);
-  private Point secondNextPoint = new Point(0,0);
-  private Point thirdNextPoint = new Point(0,0);
-  private JPanel secondNextCell = null;
-  private JPanel thirdNextCell = null;
   public static int numRows = 10;
   public static int numCols = 10;
   public static int playerShips;
   public static int computerShips;
-//  public static String[][] grid = new String[numRows][numCols];
-//  public static int[][] missedGuesses = new int[numRows][numCols];
 
   public BattleShip() {
     super("BattleShip");
 
     ActionHandler ah = new ActionHandler();
     MouseHandler mh = new MouseHandler();
-//    MouseHandler mj = new MouseHandler();
     toolkit = getToolkit();
 
     JPanel buttonPanel = new JPanel();
@@ -83,20 +74,9 @@ public class BattleShip extends JFrame {
     computerPanel.addMouseListener(mh);
     mainPanel.add(computerPanel);
 
-    // attackPanel = new GamePanel();
-    // JPanel newPanel2 = new JPanel();
-
     newButton = new JButton("**** Welcome to Battle Ship game: click to start ****");
     newButton.addActionListener(ah);
     buttonPanel.add(newButton);
-
-//    gamePanel.setPreferredSize(new Dimension(gridSize * cellSize, gridSize * cellSize + 1));
-//    gamePanel.addMouseListener(mh);
-//    add(gamePanel);
-
-    // attackPanel.setPreferredSize(new Dimension(gridSize * cellSize, gridSize * cellSize + 1));
-    // attackPanel.addMouseListener(mj);
-    // add(attackPanel);
 
     JPanel statusPanel = new JPanel();
     add(statusPanel, BorderLayout.SOUTH);
@@ -130,24 +110,24 @@ public class BattleShip extends JFrame {
       timer.interrupt();
     hitGrid = new boolean[gridSize][gridSize];
     missedGrid = new boolean[gridSize][gridSize];
-    gameGrid = new int[gridSize][gridSize];
+    computerModel = new int[gridSize][gridSize];
     lost = false;
     won = false;
     started = false;
-    statusLabel.setText("Right now, sea is empty");
-    timerLabel.setText("Time:      0:00.0");
     int x;
     int y;
     for (int i = 0; i < numShips; i++) {
       do {
         x = (int) (Math.random() * (gridSize - 1) + .5);
         y = (int) (Math.random() * (gridSize - 1) + .5);
-      } while (gameGrid[x][y] != NONE);
-      gameGrid[x][y] = SHIP;
-    }
+        
+      } while (computerModel[x][y] != NONE);
+      computerModel[x][y] = SHIP; 
+    }      
+
     for (int i = 0; i < gridSize; i++) {
       for (int j = 0; j < gridSize; j++) {
-        if (gameGrid[i][j] == SHIP)
+        if (computerModel[i][j] == SHIP)
           continue;
       }
     }
@@ -158,7 +138,6 @@ public class BattleShip extends JFrame {
     public void paintComponent(Graphics g) 
     {
       super.paintComponent(g);
-
       g.setColor(Color.CYAN);
       g.fillRect(0,0,gridSize*cellSize,gridSize*cellSize);
       g.setColor(Color.BLACK);
@@ -189,6 +168,8 @@ public class BattleShip extends JFrame {
     public void paintComponent(Graphics g) 
     {
       super.paintComponent(g);
+      g.setColor(Color.CYAN);
+      g.fillRect(0,0,gridSize*cellSize,gridSize*cellSize);
       g.setColor(Color.BLACK);
       for (int i = 0; i < gridSize + 1; i++) 
       {
@@ -198,83 +179,29 @@ public class BattleShip extends JFrame {
       {
         g.drawLine(i * cellSize , 0, i * cellSize ,cellSize*gridSize);
       }
+      g.setColor(Color.RED);
       for (int i = 0; i < gridSize; i++) 
       {
         for (int j = 0; j < gridSize; j++) 
         {
-
-          if (hitGrid[i][j] == true) 
+          if (computerModel[i][j] == SHIP) 
           {
-            g.setColor(Color.RED);
-            g.fillRect(i * cellSize, j * cellSize, 20, 20);
+            //hitGrid[i][j] == true
+            g.fillRect(i * cellSize+1, j * cellSize+1, cellSize-1,cellSize-1);
           } else 
           {
             g.setColor(Color.BLUE);
             // g.fillRect(i*cellSize,j*cellSize,20,20);
           }
+          // if(debug)
+          // {
+          //   g.setColor(Color.CYAN);
+          //   g.drawString(""+computerModel[i][j], i*cellSize+6, j*cellSize+15);
+          // }
         }
       }
     }
   }
-
-  /*
-  public void getComp2(Point newPoint)
-    {
-        secondNextCell = (JPanel) this.getComponentAt(newPoint);
-    }
-    public void getComp3(Point newPoint)
-    {
-        thirdNextCell = (JPanel) this.getComponentAt(newPoint);
-    }
-    protected JPanel getCell()
-    {
-
-        JPanel firstCell = new JPanel();
-        firstCell.setBorder(BorderFactory.createLineBorder(Color.blue, 2));
-        firstCell.setPreferredSize(new Dimension(20, 20)); // for demo purposes only
-        firstCell.setBackground(Color.black);
-
-        firstCell.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) 
-                {
-
-                    firstPoint = firstCell.getLocation();
-                    double xPos = (firstPoint.getX()/20+1);
-                    int x = (int) xPos;
-                    double yPos = (firstPoint.getY()/20+1);
-                    int y = (int) yPos;
-
-                    double xPos2 = (firstPoint.getX()/20+2);
-                    int x2 = (int) xPos2;
-                    double yPos2 = (firstPoint.getY()/20+1);
-                    int y2 = (int) yPos2;
-
-                    double xPos3 = (firstPoint.getX()/20+3);
-                    int x3 = (int) xPos3;
-                    double yPos3 = (firstPoint.getY()/20+1);
-                    int y3 = (int) yPos3;
-
-
-                    System.out.print("\nLocation (X: " + x + " Y: " + y + ")");
-
-                    secondNextPoint = new Point((int)(firstPoint.getX()+20),(int)(firstPoint.getY()));
-                    thirdNextPoint = new Point((int)(firstPoint.getX()+40),(int)(firstPoint.getY()));
-                    Coordinate a = new Coordinate(x,y);
-                    Coordinate b = new Coordinate(x2,y2);
-                    Coordinate c = new Coordinate(x3,y3);
-
-                    getComp2(secondNextPoint);
-                    getComp3(thirdNextPoint);
-                    // BattleShip.addShip(a,b,c); // Create new ship object
-                    // draw();
-                
-                }
-      
-        });
-        return firstCell;
-    }
-*/
 
   public class Coordinate 
   {
@@ -317,7 +244,9 @@ public class BattleShip extends JFrame {
       playerModel = new int[10][10];
       computerModel = new int[10][10];
       addingShips=true;
+      detectingShips=false;
       shipCount=0;
+      guess=0;
       playerPanel.repaint();
       statusLabel.setText("Deploy your ships:");
     }
@@ -327,6 +256,7 @@ public class BattleShip extends JFrame {
     public void mousePressed(MouseEvent e) {
       int i = e.getX() / cellSize;
       int j = e.getY() / cellSize;
+      int guess = 0;
       if(addingShips)
       {
         playerModel[i][j]=SHIP;
@@ -337,28 +267,37 @@ public class BattleShip extends JFrame {
           statusLabel.setText("Your Turn");
           return;
         }
+        detectingShips=true;
         playerPanel.repaint();
       }
-/*
-      if (e.getButton() == MouseEvent.BUTTON1)
+      else if(detectingShips)
       {
-        if (gameGrid[i][j] == SHIP) {
+        if(computerModel[i][j]==SHIP)
+        {
           statusLabel.setText("You Hit a Ship!");
-          hitGrid[i][j] = true;
-        } else {
-          statusLabel.setText("You Missed!");
-          defaultBackground = getBackground();
-          setBackground(Color.BLUE);
+          guess++;
         }
+        else
+        {
+          statusLabel.setText("You Missed!");
+          guess++;
+        }
+        if(guess==guessCount)
+        {
+          detectingShips=false;
+        }
+        statusLabel.setText("Computer's Turn");
+        computerPanel.repaint();
       }
-      model[i][j] = 1;
-//      out.println(i + "," + j);
-      playerPanel.repaint();
-//      yourTurn = false;
-      statusLabel.setText("Opponent's turn.");
-*/
+
+//       model[i][j] = 1;
+// //      out.println(i + "," + j);
+//       playerPanel.repaint();
+// //      yourTurn = false;
+//       statusLabel.setText("Opponent's turn.");
+// */
     }
-  }
+ }
 
   private class TimerThread extends Thread {
     public void run() {
