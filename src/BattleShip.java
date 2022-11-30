@@ -12,6 +12,8 @@ public class BattleShip extends JFrame {
   private int gridSize = 10;
   private int cellSize = 30;
   private int numShips = 10;
+  private int computerScore = 0;
+  private int playerScore = 0;
   private int guessCount = 1;
   private int[][] gameGrid;
   private int[][] playerGuessGrid;
@@ -162,6 +164,7 @@ public class BattleShip extends JFrame {
             if(playerModel[i][j]==SHIP) {
               g.setColor(Color.RED);
               g.fillRect(i * cellSize + 1, j * cellSize + 1, cellSize - 1, cellSize - 1);
+              computerScore++;
             }
             g.setColor(Color.BLACK);
             g.drawLine(i * cellSize , j * cellSize ,i* cellSize +cellSize,j* cellSize +cellSize);
@@ -281,14 +284,15 @@ public class BattleShip extends JFrame {
         if (computerModel[i][j] == SHIP) 
         {
           playerGuessGrid[i][j]=X;
-          statusLabel.setText("You Hit a Ship!");
+          playerScore++;
+          statusLabel.setText("PLAYER: " + playerScore + " COM: " + computerScore + " || " + "You Hit a Ship!");        
           computerPanel.repaint();
           guess++;
         } 
         else 
         {
           playerGuessGrid[i][j]=X;
-          statusLabel.setText("You Missed!");
+          statusLabel.setText("PLAYER: " + playerScore + " COM: " + computerScore + " || " + "You Missed!");
           guess++;
         }
         computerPanel.repaint();
