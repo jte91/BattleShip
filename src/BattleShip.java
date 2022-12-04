@@ -2,9 +2,6 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-//import javax.sound.sampled.*;
-//import java.io.*;
-//import java.net.*;
 
 public class BattleShip extends JFrame {
   private PlayerPanel playerPanel;
@@ -53,12 +50,6 @@ public class BattleShip extends JFrame {
     JPanel buttonPanel = new JPanel();
     add(buttonPanel, BorderLayout.NORTH);
 
-    // JPanel timerPanel = new JPanel();
-    // buttonPanel.add(timerPanel);
-
-    // timerLabel = new JLabel();
-    // timerPanel.add(timerLabel);
-
     JPanel mainPanel = new JPanel();
     mainPanel.setLayout(new GridLayout(1, 2));
     add(mainPanel);
@@ -91,7 +82,7 @@ public class BattleShip extends JFrame {
   public void deployPlayerShips() 
   {
     statusLabel.setText("Deploy your ships:");
-    // Deploying five ships for player
+
     BattleShip.playerShips = 5;
     for (int i = 1; i <= BattleShip.playerShips; i++) 
     {
