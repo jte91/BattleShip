@@ -279,7 +279,7 @@ public class BattleShip extends JFrame {
           if (shipCount == numShips) 
           {
             addingShips = false;
-            statusLabel.setText("Your Turn");
+            statusLabel.setText("Your Turn: ATTACK THEIR SHIPS!");
             detectingShips = true;
             return;
           }
