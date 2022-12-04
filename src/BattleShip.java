@@ -37,8 +37,6 @@ public class BattleShip extends JFrame {
   private boolean debug = true;
   private volatile boolean lost = false;
   private volatile boolean won = false;
-
-  private volatile boolean miss = false;
   private boolean started = false;
   public static int numRows = 10;
   public static int numCols = 10;
